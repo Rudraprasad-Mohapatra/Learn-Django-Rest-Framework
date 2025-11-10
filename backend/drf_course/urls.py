@@ -10,10 +10,13 @@ router = routers.DefaultRouter()
 router.register(r"item", ecommerce_views.ItemViewSet, basename="item")
 router.register(r"order", ecommerce_views.OrderViewSet, basename="order")
 
-urlpatterns = router.urls
-
+# include router URLs alongside the explicit urlpatterns below so both
+# the API routes (item, order) and admin/contact/api-token-auth are exposed.
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("contact/", core_views.ContactAPIView.as_view()),
     path("api-token-auth/", obtain_auth_token),  # gives us access to token auth
 ]
+
+# append router-generated routes (e.g. /item/, /order/) to urlpatterns
+urlpatterns += router.urls
